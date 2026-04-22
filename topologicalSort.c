@@ -3,22 +3,29 @@
 #define Max 100
 int graph[Max][Max];
 int visited[Max];
+int recStack[Max];
 int top=-1;
 int stack[Max];
 int n;
-void dfs(int v){
+int dfs(int v){
+  int recStack[v]=1;
   int visited[v]=1;
   for(int i=0;i<n;i++){
-    if (graph[v][i]==1 && !visited[i]){
-      dfs(i);
-    }
+    if (graph[v][i]==1){
+      if(dfs(i)) return 1;
+    }else if (recStack[i]) return;
   }
+  recStack[v]=0;
   stack[++top]=v;
+  return 0;
 }
 void topologicalSort(){
   for(int i=0;i<n;i++){
     if(!visited[i]){
-      dfs(i);
+      if(dfs(i)){
+        printf("cycle detected);
+          return;
+          }
     }
   }
 
